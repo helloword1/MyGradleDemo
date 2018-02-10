@@ -1,0 +1,20 @@
+def properties = new Properties()
+properties.load(new InputStreamReader(new FileInputStream('local.properties')))
+def mKeyfile = properties.get('keyfile')
+def mKeypwd = properties.get('keypwd')
+def mKeyAlias = properties.get('keyAlias')
+def mKeyAliasPwd = properties.get('keyAliasPwd')
+
+ext{
+    keyfile=mKeyfile
+    mkeypwd=mKeypwd
+    keyAlias=mKeyAlias
+    keyAliasPwd=mKeyAliasPwd
+    minSdk = 19
+    targetSdkVersion= 26
+    versionCode =1
+    versionName ="1.0"
+    mCompileSdkVersion =26
+    mbuildToolsVersion='26.0.2'
+    mapplicationId="cxx.mytestdemo"
+}

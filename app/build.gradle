@@ -1,0 +1,94 @@
+apply plugin: 'com.android.application'
+
+android {
+    signingConfigs {
+        release {
+            keyAlias keyfile
+            keyPassword mkeypwd
+            storeFile file(keyfile)
+            storePassword keyAliasPwd
+        }
+    }
+    compileSdkVersion mCompileSdkVersion
+    buildToolsVersion(mbuildToolsVersion)
+    defaultConfig {
+        applicationId mapplicationId
+        minSdkVersion minSdk
+        targetSdkVersion targetSdkVersion
+        versionCode versionCode
+        versionName versionName
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+    productFlavors {
+        //付费版本
+        pay {
+            flavorDimensions("pay")
+            applicationId 'cxx.mytestdemo.pay'
+            versionName 'pay_1'
+            version 2
+        }
+        //免费版本
+        free {
+            flavorDimensions("free")
+            applicationId 'cxx.mytestdemo.free'
+            versionName 'free_1'
+            version 3
+        }
+    }
+
+    //忽略文件
+   /* packagingOptions {
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/LICENSE'
+    }*/
+
+    /*忽略字符翻译错误*/
+    lintOptions {
+        disable 'MissingTranslation'
+    }
+    buildTypes {
+        release {
+            minifyEnabled true
+            shrinkResources true
+            //注意字符串要用转译\
+            //在代码中可直接调用 BuildConfig.BaseUrl 以及 BuildConfig.IS_LOGIN
+            buildConfigField("String", "BaseUrl", "\"http://192.168.1.1/api/hello\"")
+            buildConfigField("boolean", "IS_LOG", "true")
+            //系统自动生成
+            resValue("string", "AppName", "MyTestDemo_debug")
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            buildConfigField("String", "BASE_URL", "\"http://192.168.1.125.baidu.com\"")
+            signingConfig signingConfigs.release
+
+        }
+        debug {
+            applicationIdSuffix ".debug"
+            versionNameSuffix "-debug"
+            debuggable = true
+            buildConfigField("String", "BaseUrl", "\"http://120.156.1.1/api/hello\"")
+            buildConfigField("boolean", "IS_LOG", "false")
+            //系统自动生成在build\generated\res\resValues\debug\values\generated.xml
+            resValue("string", "AppName", "MyTestDemo")
+        }
+    }
+    android.applicationVariants.all { variant ->
+        variant.outputs.all { output ->
+            def outputFile = output.outputFile
+            if (outputFile != null && outputFile.name.contains('release.apk')) {
+                //apk 名字
+                def fileName = "${variant.name}.apk"
+                outputFileName = fileName
+            }
+        }
+    }
+
+}
+
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation 'com.android.support:appcompat-v7:26.1.0'
+    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'com.android.support.test:runner:1.0.1'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
+}

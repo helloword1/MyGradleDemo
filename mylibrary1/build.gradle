@@ -1,0 +1,46 @@
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion targetSdkVersion
+    defaultConfig {
+        minSdkVersion minSdk
+        targetSdkVersion targetSdkVersion
+        versionCode versionCode
+        versionName versionName
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+    }
+    buildTypes {
+        debug {
+            minifyEnabled false
+            //注意字符串要用转译\
+            //在代码中可直接调用 BuildConfig.BaseUrl 以及 BuildConfig.IS_LOGIN
+            buildConfigField("String", "BaseUrl", "\"http://192.168.1.1/api/hello\"")
+            buildConfigField("boolean", "IS_LOG", "true")
+            //系统自动生成
+            resValue("string", "AppName", "MyTestDemo_debug")
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+        release {
+            minifyEnabled true
+            //注意字符串要用转译\
+            //在代码中可直接调用 BuildConfig.BaseUrl 以及 BuildConfig.IS_LOGIN
+            buildConfigField("String", "BaseUrl", "\"http://120.156.1.1/api/hello\"")
+            buildConfigField("boolean", "IS_LOG", "false")
+            //系统自动生成在build\generated\res\resValues\debug\values\generated.xml
+            resValue("string", "AppName", "MyTestDemo")
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    implementation 'com.android.support:appcompat-v7:26.1.0'
+    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'com.android.support.test:runner:1.0.1'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
+}
